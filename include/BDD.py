@@ -1,7 +1,7 @@
-#Tyler Sorensen
+#Mark Van der Merwe
 #University of Utah
-#March 1, 2012
-#BDD.py
+#October 2017
+#Based on work by Tyler Sorensen in 2012
 
 ##############################################################################
 #An updated BDD package with the following improvements:
@@ -124,12 +124,11 @@ def all_sat(bdd):
     
     return assig
 
-def dot_bdd(bdd, fname):
+def dot_bdd(bdd):
     """
-    prints a dot file FNAME representing the binary decision
-    diagram BDD
+    Creates and returns a graphviz graph representing the bdd.
     """
-    dbdd.print_bdd(bdd, fname)
+    return dbdd.print_bdd(bdd)
     
 def stat_string(bdd):
     """
