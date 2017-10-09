@@ -21,6 +21,7 @@
 
 import copy
 import sys
+import os
 
 import PyBool_public_interface as pb
 import dot_bdd as dbdd
@@ -40,7 +41,7 @@ def bdd_init(fName):
     var_order = expr["var_order"]
     expr      = expr["main_expr"]
 
-    #make sure all variables are accounted for
+    # make sure all variables are accounted for
     assert(len(var_order) >= pb.number_vars(expr))
 
     #values are tuples in the form (i, low, high)
@@ -55,6 +56,27 @@ def bdd_init(fName):
             #boolean formula info
             "var_order"      : var_order     ,
             "expr"           : expr          }
+
+
+def bdd_create(string_bdd):
+    """
+    Initializes a BDD data structure (dictionary) with the
+    Boolean Formula string passed in. Helper function that
+    puts string in file and forwards to other implementation.
+    """
+    filename = "temp.txt"
+
+    lines = map(lambda s: s + "\n", filter(lambda s: s != "", string_bdd.splitlines()))
+
+    # Create a temporary file to write to
+    with open(filename, "w+") as f:
+        f.write("".join(lines))
+        # Forward operation.
+
+    bdd = bdd_init(filename)
+    build(bdd)
+    return bdd
+
 
 def build(bdd):
     """
