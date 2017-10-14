@@ -14,7 +14,9 @@
 # -- Cleaner, well defined public interface
 #
 # -- No more printing statistics, the user can do that themselves!
-#
+# 
+# -- Written in Python2.x. Previous version in Python3.x caused some 
+#          Headaches.
 ##############################################################################
 
 import copy
@@ -64,7 +66,7 @@ def bdd_create(string_bdd):
     """
     filename = "temp.txt"
 
-    lines = [s + "\n" for s in [s for s in string_bdd.splitlines() if s != ""]]
+    lines = map(lambda s: s + "\n", filter(lambda s: s != "", string_bdd.splitlines()))
 
     # Create a temporary file to write to
     with open(filename, "w+") as f:
@@ -308,8 +310,8 @@ def _walk_variable_up(num_nodes, current_position, bdd, out, verbose):
             num_nodes = bdd["u"]+1
             best_order = list(bdd["var_order"])
             if verbose:
-                print("Walk Up New Number of Nodes: %d" % num_nodes)
-                print("Walk Up New Var Order: %s" % str(bdd["var_order"]))
+                print "Walk Up New Number of Nodes: %d" % num_nodes
+                print "Walk Up New Var Order: %s" % str(bdd["var_order"])
     out["num_nodes"] = num_nodes
     out["best_order"] = best_order
     
@@ -326,14 +328,14 @@ def reorder_ite_build(bdd, vars_to_consider=[], verbose=False):
     num_nodes = bdd["u"]+1
     num_vars = len(bdd["var_order"])
     if verbose:
-        print("Original Number of Nodes: %d" % num_nodes)
-        print("Number of Variables: %d" % num_vars)
+        print "Original Number of Nodes: %d" % num_nodes
+        print "Number of Variables: %d" % num_vars
     checked_vars = {}
     if not vars_to_consider:
         vars_to_consider = bdd["var_order"]
     for v in vars_to_consider:
         checked_vars[v] = False
-    while False in list(checked_vars.values()):
+    while False in checked_vars.values():
         var_to_be_checked = None
         for key in checked_vars:
             if not checked_vars[key]:
@@ -344,7 +346,7 @@ def reorder_ite_build(bdd, vars_to_consider=[], verbose=False):
         original_order = best_order
         current_position = bdd["var_order"].index(var_to_be_checked)
         if verbose:
-            print("Current Variable: %s" % var_to_be_checked)
+            print "Current Variable: %s" % var_to_be_checked
         original_position = current_position
         
         #start thread to walk to top
@@ -372,8 +374,8 @@ def reorder_ite_build(bdd, vars_to_consider=[], verbose=False):
                 num_nodes = bdd["u"]+1
                 best_order = list(bdd["var_order"])
                 if verbose:
-                    print("Walk Down New Number of Nodes: %d" % num_nodes)
-                    print("Walk Down New Var Order: %s" % str(bdd["var_order"]))
+                    print "Walk Down New Number of Nodes: %d" % num_nodes
+                    print "Walk Down New Var Order: %s" % str(bdd["var_order"])
             
         walk_up_thread.join()
         
@@ -389,8 +391,8 @@ def reorder_ite_build(bdd, vars_to_consider=[], verbose=False):
     bdd["var_order"] = best_order
     ite.ite_build(bdd)
     if verbose:
-        print("Final Number of Nodes: %d" % num_nodes)
-        print("Final Var Order %s" % str(bdd["var_order"]))
+        print "Final Number of Nodes: %d" % num_nodes
+        print "Final Var Order %s" % str(bdd["var_order"])
 
 
 ###################################################################
